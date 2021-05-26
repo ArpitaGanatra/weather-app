@@ -26,3 +26,12 @@
 .card_body {
   padding-bottom: 5px;
 }
+
+@media screen and (max-width: 1023px) {
+  .weather_card {
+    width: 125px;
+  }
+  .card_text {
+    font-size: 18px;
+  }
+}

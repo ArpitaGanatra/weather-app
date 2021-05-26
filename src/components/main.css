@@ -104,5 +104,30 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 1023px) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+  .left_container,
+  .right_container {
+    width: 100%;
+  }
+  .right_container {
+    align-items: center;
+    margin-top: 20px;
+  }
+  .temperature .temp_desc p {
+    font-size: 18px;
+  }
+  .temperature .weather {
+    font-size: 30px;
+  }
+  .date_and_time {
+    font-size: 18px;
+  }
 }
