@@ -7,6 +7,7 @@ import Cards from "./Cards";
 
 const Main = () => {
   const [location, setLocation] = useState("");
+  const [error, setError] = useState(false);
   const [info, setInfo] = useState({
     date_value: "",
     temperature: "",
@@ -25,39 +26,48 @@ const Main = () => {
   };
 
   const getCoordinates = () => {
-    getLatLong(location).then((res) => {
-      console.log(res);
-      console.log(res.coord);
-      const lon = res.coord.lon;
-      const lat = res.coord.lat;
-      console.log(lon, lat);
-      loadForecast(lon, lat);
-    });
+    getLatLong(location)
+      .then((res) => {
+        // console.log(res);
+        // console.log(res.coord);
+        const lon = res.coord.lon;
+        const lat = res.coord.lat;
+        // console.log(lon, lat);
+        loadForecast(lon, lat);
+      })
+      .catch((err) => {
+        setError(true);
+        setInfo({});
+      });
   };
 
   const loadForecast = (lon, lat) => {
-    getForecast(lon, lat).then((res) => {
-      console.log("new", res);
-      setInfo({
-        ...info,
-        date_value: res.data.current.dt,
-        temperature: res.data.current.temp,
-        description: res.data.current.weather[0].description,
-        windSpeed: res.data.current.wind_speed,
-        humidity: res.data.current.humidity,
-        sunrise: moment.unix(res.data.current.sunrise).format("h:mm A"),
-        sunset: moment.unix(res.data.current.sunset).format("h:mm A"),
-        imgCode: res.data.current.weather[0].icon,
-        labels: res.data.daily.map((date) => {
-          return moment.unix(date.dt).format("MMMM Do");
-        }),
-        forecastData: res.data.daily.map((daily_temp) => {
-          return daily_temp.temp.day;
-        }),
-        dailyWeathers: res.data.daily.slice(1, 6),
+    getForecast(lon, lat)
+      .then((res) => {
+        // console.log("new", res);
+        setInfo({
+          ...info,
+          date_value: res.data.current.dt,
+          temperature: res.data.current.temp,
+          description: res.data.current.weather[0].description,
+          windSpeed: res.data.current.wind_speed,
+          humidity: res.data.current.humidity,
+          sunrise: moment.unix(res.data.current.sunrise).format("h:mm A"),
+          sunset: moment.unix(res.data.current.sunset).format("h:mm A"),
+          imgCode: res.data.current.weather[0].icon,
+          labels: res.data.daily.map((date) => {
+            return moment.unix(date.dt).format("MMMM Do");
+          }),
+          forecastData: res.data.daily.map((daily_temp) => {
+            return daily_temp.temp.day;
+          }),
+          dailyWeathers: res.data.daily.slice(1, 6),
+        });
+      })
+      .catch((err) => {
+        setError(true);
+        setInfo({});
       });
-      console.log(setInfo.humidity);
-    });
   };
 
   const handleSubmit = (e) => {
@@ -79,6 +89,11 @@ const Main = () => {
             <button type="submit">Search</button>
           </div>
         </form>
+        {error && (
+          <p style={{ color: "#e04141", textAlign: "center" }}>
+            <b>Enter a valid location</b>
+          </p>
+        )}
 
         <div className="date_and_time">
           <b>{location}: </b>
@@ -133,7 +148,7 @@ const Main = () => {
       <div className="right_container">
         <Chart temp={info.forecastData} labels={info.labels} />
         <div className="card_container">
-          {info.dailyWeathers.length > 0
+          {info.dailyWeathers?.length > 0
             ? info.dailyWeathers.map((d, index) => (
                 <Cards
                   className="individual_cards"

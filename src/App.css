@@ -16,11 +16,13 @@
   display: flex;
   text-decoration: none;
   justify-content: center;
+  /* margin-top: 5px; */
+  margin-bottom: 5px;
 }
 
 .card {
   background-color: white;
-  min-height: 90vh;
+  min-height: 85vh;
   padding: 20px 20px 20px 20px;
   margin: 20px 20px 0px 20px;
   border-radius: 20px;

@@ -11,7 +11,7 @@ function App() {
         href="https://www.linkedin.com/in/arpita-ganatra-ab577b146/"
         className="footer"
       >
-        @Arpita Ganatra{" "}
+        @Arpita Ganatra
       </a>
     </div>
   );
